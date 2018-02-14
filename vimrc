@@ -20,23 +20,27 @@ Plugin 'tomtom/tcomment_vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'scrooloose/syntastic'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'davidhalter/jedi-vim'
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 Plugin 'gabesoft/vim-ags'
+Plugin 'tpope/vim-fugitive'
 Plugin 'mxw/vim-jsx'
+Plugin 'Yggdroot/indentLine'
+Plugin 'godlygeek/tabular'
 
-if &term =~ "xterm\\|rxvt"
-  " use an orange cursor in insert mode
-  let &t_SI = "\<Esc>]12;orange\x7"
-  " use a red cursor otherwise
-  let &t_EI = "\<Esc>]12;red\x7"
-  silent !echo -ne "\033]12;red\007"
-  " reset cursor when vim exits
-  autocmd VimLeave * silent !echo -ne "\033]112\007"
-  " use \003]12;gray\007 for gnome-terminal and rxvt up to version 9.21
-endif
-
+" if &term =~ "xterm\\|rxvt"
+"   " use an orange cursor in insert mode
+"   let &t_SI = "\<Esc>]12;orange\x7"
+"   " use a red cursor otherwise
+"   let &t_EI = "\<Esc>]12;red\x7"
+"   silent !echo -ne "\033]12;red\007"
+"   " reset cursor when vim exits
+"   autocmd VimLeave * silent !echo -ne "\033]112\007"
+"   " use \003]12;gray\007 for gnome-terminal and rxvt up to version 9.21
+" endif
+"
 " resize window CTRL+(h|j|k|l)
 noremap <C-j> :resize +1<CR>
 noremap <C-k> :resize -1<CR>
@@ -45,6 +49,9 @@ noremap <C-l> :vertical resize +1<CR>
 
 "Quicksilver
 let g:ackprg = 'ag --nogroup --nocolor --column'
+
+"Set color for indent plugin character
+let g:indentLine_color_term = 239
 
 " check one time after 4s of inactivity in normal mode
 set autoread
@@ -60,6 +67,14 @@ call vundle#end()
 colorscheme Monokai
 filetype plugin indent on
 
+"""""" Trailing spaces
+highlight ExtraWhitespace ctermbg=blue guibg=blue
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
 """"""""
 if has('autocmd')
   filetype plugin indent on
@@ -72,7 +87,7 @@ endif
 
 "Set F3 to switch between paste and no paste mode"
 set pastetoggle=<F3>
-:imap <C-w> <C-o><C-w>
+" :imap <C-w> <C-o><C-w>
 
 " Use :help 'option' to see the documentation for the given option.
 set autoindent
@@ -81,6 +96,8 @@ set complete-=i
 set showmatch
 set showmode
 set smarttab
+set cursorcolumn
+set cursorline
 
 set nrformats-=octal
 set shiftround
@@ -98,6 +115,8 @@ set laststatus=2
 set ruler
 set showcmd
 set wildmenu
+set textwidth=0
+set nowrap
 
 set autoread
 
@@ -114,9 +133,7 @@ set shiftwidth=4    " Indents will have a width of 4
 set softtabstop=4   " Sets the number of columns for a TAB
 
 set expandtab       " Expand TABs to spaces
-set listchars=tab:▒░,trail:▓
-set list
-set whichwrap=b,s,h,l,<,>,[,]  
+set whichwrap=b,s,h,l,<,>,[,]
 inoremap <C-U> <C-G>u<C-U>
 
 set number
@@ -144,6 +161,7 @@ set nobackup
 set nowritebackup
 set noswapfile
 set fileformats=unix,dos,mac
+set colorcolumn=80
 
 " exit insert mode
 inoremap <C-c> <Esc>
@@ -192,11 +210,20 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
+
+"""Enable in certain file types
+let g:syntastic_javascript_checkers = ['closurecompiler', 'eslint', 'flow', 'gjslint', 'jsl', 'jscs', 'jshint', 'jslint']
+let g:syntastic_json_checkers = ['jsonlint', 'jsonval']
+let g:syntastic_ruby_checkers = ['rubocop', 'mri', 'rubylint']
+let g:syntastic_css_checkers = ['csslint', 'prettycss']
+let g:syntastic_html_checkers = ['eslint', 'gjslint', 'tidy']
+let g:syntastic_go_checkers = ['go', 'gofmt', 'golint']
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_php_checkers = ['php', 'phpcs', 'phplint']
 
 function! SyntasticCheckHook(errors)
   if !empty(a:errors)
-    let g:syntastic_loc_list_height = min([len(a:errors), 3])
+    let g:syntastic_loc_list_height = min([len(a:errors), 5])
         endif
 endfunction
 
@@ -278,6 +305,7 @@ let mapleader = ','
 nnoremap <Leader>p :set paste<CR>
 nnoremap <Leader>o :set nopaste<CR>
 noremap  <Leader>g :GitGutterToggle<CR>
+set updatetime=100
 
 " this machine config
 if filereadable(expand("~/.vimrc.local"))
