@@ -15,3 +15,6 @@ https://github.com/jiangmiao/auto-pairs
 
 Rembember to use ctags:
 ctags -R -f ./.git/tags .
+
+
+Search for 'tab' in order to change tab size.
