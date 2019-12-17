@@ -13,3 +13,5 @@ https://github.com/Yggdroot/indentLine
 Install autoclose for brackets, parentheses etc:
 https://github.com/jiangmiao/auto-pairs
 
+Rembember to use ctags:
+ctags -R -f ./.git/tags .
