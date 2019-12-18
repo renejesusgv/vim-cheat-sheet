@@ -29,6 +29,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'mxw/vim-jsx'
 Plugin 'Yggdroot/indentLine'
 Plugin 'godlygeek/tabular'
+Plugin 'jiangmiao/auto-pairs'
+
 
 " if &term =~ "xterm\\|rxvt"
 "   " use an orange cursor in insert mode
@@ -123,14 +125,14 @@ set autoread
 set title "Show the title in console bar"
 set encoding=utf-8
 
-set tabstop=4       " The width of a TAB is set to 4.
+set tabstop=2       " The width of a TAB is set to 4.
                     " Still it is a \t. It is just that
                     " Vim will interpret it to be having
-                    " a width of 4.
+                    " a width of 2.
 
-set shiftwidth=4    " Indents will have a width of 4
+set shiftwidth=2    " Indents will have a width of 4
 
-set softtabstop=4   " Sets the number of columns for a TAB
+set softtabstop=2   " Sets the number of columns for a TAB
 
 set expandtab       " Expand TABs to spaces
 set whichwrap=b,s,h,l,<,>,[,]
@@ -224,7 +226,7 @@ let g:syntastic_php_checkers = ['php', 'phpcs', 'phplint']
 function! SyntasticCheckHook(errors)
   if !empty(a:errors)
     let g:syntastic_loc_list_height = min([len(a:errors), 5])
-        endif
+  endif
 endfunction
 
 " CtrlP
@@ -312,3 +314,6 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
+:imap  <C-Del>   <C-O>dw
+" sets tags to .git directory
+:set tags^=./.git/tags;
