@@ -1,7 +1,8 @@
 See for install
 
 
-Make sure you are running the full version of vim
+Make sure you are running the full version of vim, if you are using ubuntu install it with 
+sudo apt install vim-gtk
 
 https://github.com/VundleVim/Vundle.vim
 https://github.com/grigio/vim-sublime
